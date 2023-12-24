@@ -1,0 +1,82 @@
+{
+    "diffEditor.ignoreTrimWhitespace": true,
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": false
+    },
+    "editor.rulers": [
+        88, // Default black line length
+        100, // Default pylint line length
+        120
+    ],
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "heading.1.markdown entity.name.section.markdown, heading.1.markdown punctuation.definition.heading.markdown",
+                "settings": {
+                    "foreground": "#9C27B0",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": "heading.2.markdown entity.name.section.markdown, heading.2.markdown punctuation.definition.heading.markdown",
+                "settings": {
+                    "foreground": "#329D9C",
+                }
+            },
+            {
+                "scope": "heading.3.markdown entity.name.section.markdown, heading.3.markdown punctuation.definition.heading.markdown",
+                "settings": {
+                    "foreground": "#56C596",
+                }
+            },
+            {
+                "scope": "heading.4.markdown entity.name.section.markdown, heading.4.markdown punctuation.definition.heading.markdown",
+                "settings": {
+                    "foreground": "#7BE495",
+                }
+            },
+            {
+                "scope": "heading.5.markdown entity.name.section.markdown, heading.5.markdown punctuation.definition.heading.markdown",
+                "settings": {
+                    "foreground": "#CFF4D2",
+                }
+            },
+        ]
+    },
+    "git.openRepositoryInParentFolders": "always",
+    "python.analysis.typeCheckingMode": "basic",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+    },
+    "pylint.args": [
+        "--argument-rgx=[a-z_][a-z0-9_]{0,59}$",
+        "--attr-rgx=[a-z_][a-z0-9_]{0,59}$",
+        "--variable-rgx=[a-z_][a-z0-9_]{0,59}$",
+        "--class-attribute-naming-style=any",
+        "--disable=missing-module-docstring",
+        "--disable=too-few-public-methods",
+        "--disable=too-many-instance-attributes",
+        "--disable=too-many-public-methods",
+        "--disable=too-many-arguments",
+        "--disable=wrong-import-order",
+        "--good-names=i,j,j,x,y,z,ex,Run,_",
+        "--ignore-patterns=.*_pb2.*",
+        "--init-import=n",
+        "--include-naming-hint=y",
+        "--init-hook",
+    ],
+    "workbench.colorCustomizations": {
+        "editorRuler.foreground": "#0F2F2F"
+    },
+    "git.ignoreLimitWarning": true,
+    // "python.testing.cwd": "${workspaceFolder}/src",
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+}
