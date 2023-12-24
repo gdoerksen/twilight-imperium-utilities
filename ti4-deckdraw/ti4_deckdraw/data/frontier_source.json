@@ -1,0 +1,67 @@
+[
+    {
+        "Card": "Derelict Vessel",
+        "Effect": "Draw 1 secret objective.",
+        "Number in Deck": 2
+    },
+    {
+        "Card": "Enigmatic Device",
+        "Effect": "Place this card face up in your play area ACTION: You may spend 6 resources and purge this card to research 1 technology.",
+        "Number in Deck": 2
+    },
+    {
+        "Card": "Gamma Relay",
+        "Effect": "Place a gamma wormhole token in this system. Then, purge this card.",
+        "Number in Deck": 1
+    },
+    {
+        "Card": "Ion Storm",
+        "Effect": "Place the ion storm token in this system with either side face up. Then, place this card in the common play area. At the end of a \"Move Ships\" or \"Retreat\" sub-step of a tactical action during which 1 or more of your ships use the ion storm wormhole, flip the ion storm token to its opposing side.",
+        "Number in Deck": 1
+    },
+    {
+        "Card": "Lost Crew",
+        "Effect": "Draw 2 Action Cards.",
+        "Number in Deck": 2
+    },
+    {
+        "Card": "Merchant Station",
+        "Effect": "You may replenish your commodities, or you may convert your commodities to trade goods.",
+        "Number in Deck": 2
+    },
+    {
+        "Card": "Mirage",
+        "Effect": "Place the Mirage planet token in this system. Gain the Mirage planet card and ready it. Then, purge this card.",
+        "Number in Deck": 1
+    },
+    {
+        "Card": "Unknown Relic Fragment",
+        "Effect": "This card counts as a relic fragment of any type.",
+        "Number in Deck": 3
+    },
+    {
+        "Card": "Dead World",
+        "Effect": "Draw 1 relic.",
+        "Number in Deck": 1
+    },
+    {
+        "Card": "Entropic Field",
+        "Effect": "Gain 1 command token and 2 trade goods.",
+        "Number in Deck": 1
+    },
+    {
+        "Card": "Keleres Ship",
+        "Effect": "Gain 2 command tokens.",
+        "Number in Deck": 2
+    },
+    {
+        "Card": "Major Entropic Field",
+        "Effect": "Gain 1 command token and 3 trade goods.",
+        "Number in Deck": 1
+    },
+    {
+        "Card": "Minor Entropic Field",
+        "Effect": "Gain 1 command token and 1 trade good.",
+        "Number in Deck": 1
+    }
+]
