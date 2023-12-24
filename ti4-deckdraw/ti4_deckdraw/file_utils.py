@@ -36,6 +36,18 @@ def convert_csv_to_json(source_file: Path, dest_file: Path):
         json.dump(deck, f, indent=4)
 
 
+# TODO wrap all the functions we care about using this nice wrapper as the interface
+def enum_wrapper(deckname: DeckEnum, func):
+    """Wrapper for the deck enum."""
+    match deckname:
+        case DeckEnum.FRONTIER:
+            func(Path(FRONTIER_SOURCE), Path(FRONTIER_REMOVED))
+        case DeckEnum.RELIC:
+            func(Path(RELIC_SOURCE), Path(RELIC_REMOVED))
+        case _:
+            raise ValueError(f"Invalid deck: {deckname}")
+
+
 def load_deck_source_csv(source_file: Path) -> list[Card]:
     """Load the deck from the source csv file."""
     deck: list[Card] = []
@@ -62,6 +74,19 @@ def load_deck_source_json(source_file: Path) -> list[Card]:
     return deck
 
 
+def load_deck_source_enum(deckname: DeckEnum) -> list[Card]:
+    """Load the deck from the source file."""
+    match deckname:
+        case DeckEnum.FRONTIER:
+            deck = load_deck_source_json(Path(FRONTIER_SOURCE))
+        case DeckEnum.RELIC:
+            deck = load_deck_source_json(Path(RELIC_SOURCE))
+        case _:
+            raise ValueError(f"Invalid deck: {deckname}")
+
+    return deck
+
+
 def load_removed_deck(removed_file: Path) -> list[str]:
     """Load the removed deck from the removed file."""
     removed_deck = []
@@ -74,6 +99,27 @@ def load_removed_deck(removed_file: Path) -> list[str]:
         for line in f:
             removed_deck.append(line.strip())
     return removed_deck
+
+
+def load_removed_deck_enum(deckname: DeckEnum) -> list[str]:
+    """Load the removed deck from the removed file."""
+    match deckname:
+        case DeckEnum.FRONTIER:
+            removed_deck = load_removed_deck(Path(FRONTIER_REMOVED))
+        case DeckEnum.RELIC:
+            removed_deck = load_removed_deck(Path(RELIC_REMOVED))
+        case _:
+            raise ValueError(f"Invalid deck: {deckname}")
+
+    return removed_deck
+
+
+def load_removed_as_history(deckname: DeckEnum) -> list[Card]:
+    """Load the removed deck from the removed file as a list of cards."""
+    removed_deck = load_removed_deck_enum(deckname)
+    deck = load_deck_source_enum(deckname)
+
+    return [card for card in deck if card.title in removed_deck]
 
 
 def load_deck(source_file: Path, removed_file: Path) -> list[Card]:
@@ -111,7 +157,7 @@ def load_deck_enum(deckname: DeckEnum) -> list[Card]:
 
 def save_to_removed(deck: list[Card], removed_file: Path):
     """Save the deck to the removed file."""
-    with removed_file.open("w") as f:
+    with removed_file.open("a") as f:
         for card in deck:
             f.write(f"{card.title}\n")
 
@@ -123,5 +169,16 @@ def save_to_removed_enum(deckname: DeckEnum, deck: list[Card]):
             save_to_removed(deck, Path(FRONTIER_REMOVED))
         case DeckEnum.RELIC:
             save_to_removed(deck, Path(RELIC_REMOVED))
+        case _:
+            raise ValueError(f"Invalid deck: {deckname}")
+
+
+def delete_removed_enum(deckname: DeckEnum):
+    """Delete the removed file."""
+    match deckname:
+        case DeckEnum.FRONTIER:
+            Path(FRONTIER_REMOVED).unlink()
+        case DeckEnum.RELIC:
+            Path(RELIC_REMOVED).unlink()
         case _:
             raise ValueError(f"Invalid deck: {deckname}")

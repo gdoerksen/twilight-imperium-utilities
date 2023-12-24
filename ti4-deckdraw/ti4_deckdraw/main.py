@@ -1,14 +1,22 @@
 from pathlib import Path
+from typing_extensions import Annotated
 
 import typer
 from rich.console import Console
 from rich.panel import Panel
 
-from .file_utils import load_deck_enum, save_to_removed_enum
+from .file_utils import (
+    load_deck_enum,
+    save_to_removed_enum,
+    delete_removed_enum,
+    load_removed_as_history,
+)
 from .models import Card, DeckEnum
 
 
 app = typer.Typer()
+show_app = typer.Typer()
+app.add_typer(show_app, name="show")
 console = Console()
 
 
@@ -33,16 +41,24 @@ def print_card_as_panel(card: Card):
     )
 
 
-@app.command()
-def show(deckname: DeckEnum):
-    """Show the chosen deck."""
+@show_app.command()
+def remaining(deckname: DeckEnum):
+    """Show what is remaining in the chosen deck."""
     deck = load_deck_enum(deckname)
     for card in deck:
         print_card_as_panel(card)
 
 
+@show_app.command()
+def history(deckname: DeckEnum):
+    """Show what has been removed from the chosen deck."""
+    removed = load_removed_as_history(deckname)
+    for card in removed:
+        print_card_as_panel(card)
+
+
 @app.command()
-def draw(deckname: DeckEnum, number: int = 1):
+def draw(deckname: DeckEnum, number: Annotated[int, typer.Argument()] = 1):
     """Draw cards from the chosen deck equal to the number."""
     deck = load_deck_enum(deckname)
     removed = []
@@ -56,7 +72,7 @@ def draw(deckname: DeckEnum, number: int = 1):
 @app.command()
 def reset(deckname: DeckEnum):
     """Resets the chosen deck to full."""
-    pass
+    delete_removed_enum(deckname)
 
 
 if __name__ == "__main__":
