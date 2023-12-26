@@ -58,21 +58,55 @@ def history(deckname: DeckEnum):
 
 
 @app.command()
-def draw(deckname: DeckEnum, number: Annotated[int, typer.Argument()] = 1):
+def draw(
+    deckname: DeckEnum,
+    number: Annotated[int, typer.Argument(help="Number of cards to draw")] = 1,
+):
     """Draw cards from the chosen deck equal to the number."""
     deck = load_deck_enum(deckname)
-    removed = []
-    for _ in range(number):
-        card = deck.pop()
-        removed.append(card)
-        print_card_as_panel(card)
-    save_to_removed_enum(deckname, removed)
+
+    deck_remaining = len(deck)
+    if number > deck_remaining:
+        delta = number - deck_remaining
+        for card in deck:
+            print_card_as_panel(card)
+        console.print(f"Deck is empty. {delta} cards were not drawn.")
+
+        # Handle special cases such as attachments and relic fragments
+        # gamma wormhole, demilitarized zone, etc
+
+        # prompt for how many relic fragments in discard
+        relic_fragments_left = typer.prompt(
+            "How many relic fragments are in the discard?"
+        )
+        if relic_fragments_left:
+            relic_fragments_left = int(relic_fragments_left)
+
+    else:
+        cards = []
+        for _ in range(number):
+            card = deck.pop()
+            print_card_as_panel(card)
+            cards.append(card)
+        save_to_removed_enum(deckname, cards)
 
 
 @app.command()
 def reset(deckname: DeckEnum):
     """Resets the chosen deck to full."""
     delete_removed_enum(deckname)
+
+
+@app.command()
+def start_game():
+    """Reset all decks so you can start a new game."""
+    response = typer.prompt("Are you sure you want to reset all decks? (y/n)")
+    if response.lower() != "y":
+        typer.echo("Aborting.")
+        raise typer.Abort()
+
+    for deckname in DeckEnum:
+        reset(deckname)
 
 
 if __name__ == "__main__":
