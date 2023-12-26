@@ -15,3 +15,14 @@ class Card:
 
     title: str
     description: str
+
+    def __hash__(self):
+        return hash(self.title)
+
+
+@dataclass
+class CardStats(Card):
+    """A dataclass to represent a card with statistics for the show probability command."""
+
+    probability: float
+    remaining: int

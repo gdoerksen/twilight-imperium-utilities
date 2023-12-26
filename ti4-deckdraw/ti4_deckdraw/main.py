@@ -4,6 +4,7 @@ from typing_extensions import Annotated
 import typer
 from rich.console import Console
 from rich.panel import Panel
+from rich.table import Table
 
 from .file_utils import (
     load_deck_enum,
@@ -11,7 +12,7 @@ from .file_utils import (
     delete_removed_enum,
     load_removed_as_history,
 )
-from .models import Card, DeckEnum
+from .models import Card, CardStats, DeckEnum
 
 
 app = typer.Typer()
@@ -57,12 +58,52 @@ def history(deckname: DeckEnum):
         print_card_as_panel(card)
 
 
+@show_app.command()
+def probability(deckname: DeckEnum):
+    """Show the probability of drawing each card in the chosen deck."""
+    deck = load_deck_enum(deckname)
+    removed = load_removed_as_history(deckname)
+    deck_remaining = len(deck)
+    removed_remaining = len(removed)
+    total_remaining = deck_remaining + removed_remaining
+
+    table = Table(title="Probability of Drawing Each Card")
+    table.add_column("Card")
+    table.add_column("Probability", justify="right")
+    table.add_column("R", justify="right")
+
+    uniques = set(deck)
+    card_stats: list[CardStats] = []
+    for card in uniques:
+        count = sum(1 for c in deck if c.title == card.title)
+        probability = count / total_remaining
+        # table.add_row(card.title, f"{probability:.2%}", str(count))
+
+        card_stats.append(
+            CardStats(
+                title=card.title,
+                description=card.description,
+                probability=probability,
+                remaining=count,
+            )
+        )
+
+    card_stats.sort(key=lambda x: x.probability, reverse=True)
+    for card in card_stats:
+        table.add_row(card.title, f"{card.probability:.2%}", str(card.remaining))
+
+    console.print(table)
+
+
 @app.command()
 def draw(
     deckname: DeckEnum,
     number: Annotated[int, typer.Argument(help="Number of cards to draw")] = 1,
 ):
     """Draw cards from the chosen deck equal to the number."""
+
+    # TODO: For explore decks, ask follow up questions for reshuffling
+
     deck = load_deck_enum(deckname)
 
     deck_remaining = len(deck)
